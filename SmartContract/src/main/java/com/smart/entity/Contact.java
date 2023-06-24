@@ -1,14 +1,13 @@
 package com.smart.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-@Entity
+@javax.persistence.Entity
 @Table(name="CONTACT")
 public class Contact {
 	@Id
@@ -89,6 +88,14 @@ public class Contact {
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Contact [cid=" + cid + ", name=" + name + ", secondName=" + secondName + ", work=" + work + ", email="
+				+ email + ", image=" + image + ", description=" + description + ", phone=" + phone + ", user=" + user
+				+ "]";
 	}
 	
 	

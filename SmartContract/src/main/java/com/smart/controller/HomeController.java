@@ -1,28 +1,43 @@
 package com.smart.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.dao.UserRepository;
 import com.smart.entity.User;
 import com.smart.helper.Message;
 
-import jakarta.servlet.http.HttpSession;
 
 
 @Controller
 public class HomeController {
 	
 	@Autowired
+	private  BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
 	private UserRepository userRep;
 	
+	@ResponseBody
+	@GetMapping("/error")
+    public String handleError() {
+        // Handle the error and return an appropriate view or redirect
+        return "error";
+    }
+	
+	
 	  @GetMapping("/removeMessage")
-	    public String removeMessage(HttpSession session) {
+	    public String removeMessage(javax.servlet.http.HttpSession session) {
 	        session.removeAttribute("message");
 	        return "redirect:/signup";
 	    }
@@ -46,16 +61,23 @@ public class HomeController {
 	}
 	
 	@PostMapping("/do_register")
-	public String registerUser(@ModelAttribute("user") User user,@RequestParam(value="agreement", defaultValue = "false") Boolean agreement, Model model ,HttpSession session) {
+	public String registerUser(@javax.validation.Valid @ModelAttribute("user") User user,BindingResult Result,@RequestParam(value="agreement", defaultValue = "false") Boolean agreement, Model model ,HttpSession session) {
 		try {
 		
 		if(!agreement) {
 			System.out.println("you don't agree terms and condition");
-	throw	new Exception("you don't agree terms and condition");
+	throw new Exception("you don't agree terms and condition");
+		}
+		
+		if(Result.hasErrors()) {
+			System.out.println("error"+ Result.toString());
+			model.addAttribute("user", user);
+			return "signup";
 		}
 		user.setRole("ROLE_USER");
 		user.setEnabled(true);
 		user.setImageUrl("default.png");
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		
 		this.userRep.save(user);
 		model.addAttribute("user", new User()); 
@@ -75,4 +97,12 @@ public class HomeController {
 
 	}
 
+	@GetMapping("/signin")
+	public String customLogin(Model model) {
+		model.addAttribute("title","Login Page");
+		return "login";
+	}
+	
+	
+	
 }

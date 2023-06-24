@@ -3,15 +3,19 @@ package com.smart.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 
 @Entity
 @Table(name="USER")
@@ -20,11 +24,16 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
+	@NotBlank(message="Name field is required!")
+	@Size(min = 2, max = 20, message = "Name length should be 2 to 20")
 	private String name;
 	@Column(unique=true)
+	@Pattern(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$" , message="Invalid Email Syntax!!")
 	private String email;
-	private String Password;
+	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message="Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character")
+	private String password;
 	@Column(length=500)
+	@Size(max = 500, message = "message should be below than 500")
 	private String about;
 	private String role;
 	private Boolean enabled;
@@ -70,12 +79,12 @@ public class User {
 
 
 	public String getPassword() {
-		return Password;
+		return password;
 	}
 
 
 	public void setPassword(String password) {
-		Password = password;
+		this.password = password;
 	}
 
 
@@ -130,7 +139,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", email=" + email + ", Password=" + Password + ", about=" + about
+		return "User [id=" + id + ", name=" + name + ", email=" + email + ", Password=" + password + ", about=" + about
 				+ ", role=" + role + ", enabled=" + enabled + ", imageUrl=" + imageUrl + ", contacts=" + contacts + "]";
 	}
 	
