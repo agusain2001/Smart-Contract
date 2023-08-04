@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @javax.persistence.Entity
 @Table(name="CONTACT")
 public class Contact {
@@ -22,6 +24,7 @@ public class Contact {
 	private String description;
 	private String phone;
 	
+	@JsonIgnore
 	@ManyToOne
 	private User user;
 	

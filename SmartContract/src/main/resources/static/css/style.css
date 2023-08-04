@@ -100,3 +100,17 @@ body{
 }
 
 
+.search-result{
+	position:absolute;
+	background:white;
+	width:100%;
+	padding:10px;
+	border: 1px solid gray;
+	display: none;
+}
+
+.search-container{
+	position: relative;
+}
+
+

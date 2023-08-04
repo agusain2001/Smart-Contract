@@ -10,6 +10,21 @@
 	<div class="card" style="margin-right:15px; margin-left:15px;" th:if="${!contacts.isEmpty}">
 	<div class="card-body">
 	<h1>Your Contacts</h1>
+	
+	<div class="search-container my-4">
+	
+	<input onkeyup="search()" id="search-input" type="text" class="form-control" placeholder="Search by contacts" />
+	<div class="search-result">
+	
+	</div>
+	
+	
+	</div>
+	
+	
+	
+	
+	
 	<table class="table">
   <thead>
     <tr>
